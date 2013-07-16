@@ -11,8 +11,6 @@
 
 	<mvc:annotation-driven />
 	
-	<context:component-scan base-package="com.javasoft.controller" />
-	
 	<mvc:view-controller path="/error/error" view-name="error/error"/>
 	
 		<!-- 对模型视图名称的解析，即在模型视图名称添加前后缀 -->
@@ -54,17 +52,6 @@
 		</property>
 	</bean>
 
-    <mvc:resources mapping="/template/admin/css/**" location="/template/admin/css/" cache-period="20130306"/>  
-    <mvc:resources mapping="/template/common/js/**" location="/template/common/js/" cache-period="20130306"/>
-    <mvc:resources mapping="/template/common/editor/**" location="/template/common/editor/" cache-period="20130306"/>
-    <mvc:resources mapping="/template/common/css/**" location="/template/common/css/" cache-period="20130306"/>
-    <mvc:resources mapping="/template/admin/js/**" location="/template/admin/js/" cache-period="20130306"/>
-    <mvc:resources mapping="/template/admin/images/**" location="/template/admin/images/" cache-period="20130306"/>
-    <mvc:resources mapping="/upload/**" location="/upload/" cache-period="20130306"/>
-    <mvc:resources mapping="/template/front/normal/**" location="/template/front/normal/" cache-period="20130306"/>
-    <mvc:resources mapping="/template/front/furniture/**" location="/template/front/furniture/" cache-period="20130306"/>
-    <mvc:resources mapping="/template/common/imgshow/**" location="/template/common/imgshow/" cache-period="20130306"/>
-    <mvc:resources mapping="/favicon.ico" location="/favicon.ico" cache-period="20130306"/>
 
 	
 	<!-- 支持2个‘/’之间为空白的URL -->
