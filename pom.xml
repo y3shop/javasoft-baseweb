@@ -6,7 +6,6 @@
 		<artifactId>javasoft-parent</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
-	<groupId>com.javasoft</groupId>
 	<artifactId>javasoft-baseweb</artifactId>
 	<version>1.0.0</version>
 	<packaging>jar</packaging>
