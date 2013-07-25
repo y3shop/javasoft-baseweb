@@ -17,19 +17,17 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
-import org.springframework.stereotype.Service;
 
 import cn.javasoft.common.Constant;
-import cn.javasoft.security.ResourceModel;
 import cn.javasoft.security.ResourceService;
-import cn.javasoft.security.UserModel;
+import cn.javasoft.security.model.ResourceModel;
+import cn.javasoft.security.model.UserModel;
 
 /**
  * <P>TODO</P>
  * 
  * 黄雄星(13077862552,420484141@qq.com)
  */
-@Service("UserResourcesCache")
 public class UserResourcesCache {
 
 	@Autowired

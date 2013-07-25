@@ -16,6 +16,8 @@ import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 
+import cn.javasoft.security.model.ResourceModel;
+
 /**
  * 
  * <P>初始化从数据库中加载资源，通过URL得到资源集合</P>

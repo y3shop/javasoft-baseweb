@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="cn.javasoft.security.mapper.ResourceGroupMapper"> 
+	<resultMap type="cn.javasoft.security.model.ResourceGroupModel" id="ResourceGroupModel">
+		<result column="T_ID" property="id" jdbcType="VARCHAR"/>
+		<result column="T_CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+		<result column="T_UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP"/>
+		<result column="T_CREATOR" property="creator" jdbcType="VARCHAR"/>
+		<result column="T_GROUP_NAME" property="groupName" jdbcType="VARCHAR"/>
+		<result column="T_GROUP_DES" property="groupDes" jdbcType="VARCHAR"/>
+	</resultMap>
+	<sql id="baseResult">
+		T_ID, T_CREATE_TIME, T_UPDATE_TIME, T_CREATOR, T_GROUP_NAME, T_GROUP_DES
+    </sql>
+
+	<select id="queryModelById" parameterType="java.lang.String" resultMap="ResourceGroupModel">
+		select <include refid="baseResult"/>
+		from T_RESOURCE_GROUP where T_ID=#{id,jdbcType=VARCHAR}
+    	</select>
+
+	<select id="queryModel" parameterType="java.lang.String" resultMap="ResourceGroupModel">
+		select <include refid="baseResult"/>
+		from T_RESOURCE_GROUP
+	</select>
+	
+	<resultMap type="cn.javasoft.security.model.ResourceGroupModel" id="AllResourceGroupAndResource">
+		<result column="T_ID" property="id" jdbcType="VARCHAR"/>
+		<result column="T_GROUP_NAME" property="groupName" jdbcType="VARCHAR"/>
+		<collection property="resourceModels" javaType="ArrayList" ofType="cn.javasoft.security.model.ResourceModel">
+			<result column="T_REC_ID" property="id" jdbcType="VARCHAR"/>
+   			<result column="T_REC_NAME" property="recName" jdbcType="VARCHAR"/>
+   		</collection>
+	</resultMap>
+	<select id="queryAllResourceGroupAndResource" resultMap="AllResourceGroupAndResource">
+		select t.T_ID, t.T_GROUP_NAME,t1.T_ID T_REC_ID ,t1.T_REC_NAME from T_RESOURCE_GROUP t join T_RESOURCE t1 on (t.T_ID = t1.T_RESOURCE_GROUP_ID)
+	</select>
+	
+
+    <select id="queryCount" resultType="java.lang.Integer">
+       select count(*) from T_RESOURCE_GROUP
+    </select>
+
+    <select id="queryByPager"  resultMap="ResourceGroupModel">
+       select <include refid="baseResult"/>
+       from T_RESOURCE_GROUP order by T_CREATE_TIME desc limit #{startPageNumber}, #{pageSize}
+    </select>
+
+	<insert id="insertSelector" parameterType="cn.javasoft.security.model.ResourceGroupModel">
+		insert into T_RESOURCE_GROUP
+		<trim prefix="(" suffix=")" suffixOverrides=",">  
+			<if test="id != null">
+				T_ID,
+			</if>
+			<if test="createTime != null">
+				T_CREATE_TIME,
+			</if>
+			<if test="updateTime != null">
+				T_UPDATE_TIME,
+			</if>
+			<if test="creator != null">
+				T_CREATOR,
+			</if>
+			<if test="groupName != null">
+				T_GROUP_NAME,
+			</if>
+			<if test="groupDes != null">
+				T_GROUP_DES,
+			</if>
+
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=","> 
+			<if test="id != null">
+				 #{id,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				 #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				 #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="creator != null">
+				 #{creator,jdbcType=VARCHAR},
+			</if>
+			<if test="groupName != null">
+				#{groupName,jdbcType=VARCHAR},
+			</if>
+			<if test="groupDes != null">
+				#{groupDes,jdbcType=VARCHAR},
+			</if>
+
+		</trim>
+	</insert>
+    <update id="updateSelectorById" parameterType="cn.javasoft.security.model.ResourceGroupModel">
+    	update T_RESOURCE_GROUP
+    	<set>
+         	<if test="createTime != null">
+         		T_CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+         	</if>
+         	<if test="updateTime != null">
+         		T_UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+         	</if>
+         	<if test="creator != null">
+         		T_CREATOR = #{creator,jdbcType=VARCHAR},
+         	</if>
+         	<if test="groupName != null and groupName!= ''">
+         		T_GROUP_NAME = #{groupName,jdbcType=VARCHAR},
+         	</if>
+         	<if test="groupDes != null and groupDes!= ''">
+         		T_GROUP_DES = #{groupDes,jdbcType=VARCHAR},
+         	</if>
+
+    	</set>
+    	where T_ID=#{id,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="deleteById" parameterType="java.lang.String">
+    	delete from T_RESOURCE_GROUP where T_ID = #{id,jdbcType=VARCHAR}
+    </delete>
+</mapper>

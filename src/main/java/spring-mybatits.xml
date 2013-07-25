@@ -8,7 +8,7 @@
             http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
-	<context:component-scan base-package="cn.javasoft.mapper" />
+	<context:component-scan base-package="${mybatis.basePackage}" />
 
 	<!-- 读取*.properties配置信息 -->
 	<bean id="propertyConfigurer"
@@ -20,9 +20,6 @@
 		</property>
 	</bean>
 
-
-	<!-- <cloud:data-source id="dataSource" /> -->
-
 	<!-- 数据源 需要增加参数配置 -->
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 		destroy-method="close">
@@ -33,17 +30,15 @@
 	</bean>
 
 
-
-
 	<!-- spring的mybatis 配置 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="mapperLocations" value="classpath*:sqlmapper/*Mapper.xml" />
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
-	<!-- <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate"> -->
-	<!-- <constructor-arg index="0" ref="sqlSessionFactory" /> -->
-	<!-- </bean> -->
+<!-- 	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate"> -->
+<!-- 		<constructor-arg index="0" ref="sqlSessionFactory" /> -->
+<!-- 	</bean> -->
 
 	<bean id="sqlBatchSession" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg index="0" ref="sqlSessionFactory" />
@@ -63,9 +58,10 @@
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<!-- <property name="annotationClass" value="org.springframework.stereotype.Repository" 
 			/> -->
-		<property name="basePackage" value="com.javasoft.mapper" />
+		<property name="basePackage" value="${mybatis.basePackage}" />
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
 	</bean>
 
+	<!-- <cloud:data-source id="dataSource" /> -->
 
 </beans>

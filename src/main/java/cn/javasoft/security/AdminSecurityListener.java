@@ -6,7 +6,8 @@ import org.springframework.security.authentication.event.AuthenticationFailureBa
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
-import org.springframework.stereotype.Component;
+
+import cn.javasoft.security.model.UserModel;
 
 /**
  * 监听器 - 后台登录成功、登录失败处理 ============================================================================
@@ -20,7 +21,6 @@ import org.springframework.stereotype.Component;
  * ============================================================================
  */
 
-@Component("adminSecurityListener")
 public class AdminSecurityListener implements ApplicationListener<ApplicationEvent> {
 
 	@Override

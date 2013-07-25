@@ -8,6 +8,9 @@ package cn.javasoft.security;
 
 import java.util.List;
 
+import cn.javasoft.security.model.ResourceModel;
+import cn.javasoft.security.model.UserModel;
+
 /**
  * <P>TODO</P>
  * 

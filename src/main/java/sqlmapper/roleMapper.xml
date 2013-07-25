@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="cn.javasoft.security.mapper.RoleMapper"> 
+	<resultMap type="cn.javasoft.security.model.RoleModel" id="RoleModel">
+    	<result column="T_ID" property="id" jdbcType="VARCHAR"/>
+   		<result column="T_ROLE_NAME" property="roleName" jdbcType="VARCHAR"/>
+   		<result column="T_ROLE_CODE" property="roleCode" jdbcType="VARCHAR"/>
+   		<result column="T_ROLE_DESCIRBE" property="roleDescirbe" jdbcType="VARCHAR"/>
+   		<result column="T_CREATOR" property="creator" jdbcType="VARCHAR"/>
+   		<result column="T_CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+   		<result column="T_UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="baseResult">
+    	T_ID ,T_ROLE_NAME ,T_ROLE_CODE ,T_ROLE_DESCIRBE, T_CREATOR ,T_CREATE_TIME
+    </sql>
+    
+    <select id="queryModelById" parameterType="java.lang.String" resultMap="RoleModel"> 
+       select <include refid="baseResult"/>
+       from T_ROLE where T_ID=#{id,jdbcType=VARCHAR}
+    </select> 
+    
+    <select id="queryModel" parameterType="java.lang.String" resultMap="RoleModel"> 
+       select <include refid="baseResult"/>
+       from T_ROLE
+    </select> 
+    
+      <select id="queryCount" resultType="java.lang.Integer"> 
+       select count(*) from T_ROLE
+    </select>
+   
+    <select id="queryByPager"  resultMap="RoleModel"> 
+       select <include refid="baseResult"/>
+       from T_ROLE order by T_CREATE_TIME desc limit #{startPageNumber}, #{pageSize} 
+    </select> 
+    
+    <insert id="insertSelector" parameterType="cn.javasoft.security.model.RoleModel"> 
+       insert into T_ROLE 
+         <trim prefix="(" suffix=")" suffixOverrides=",">  
+         	<if test="id != null">
+         		T_ID,
+         	</if>
+         	<if test="roleName != null">
+         		T_ROLE_NAME,
+         	</if>
+         	<if test="roleCode != null">
+         		T_ROLE_CODE,
+         	</if>
+         	<if test="roleDescirbe != null">
+         		T_ROLE_DESCIRBE,
+         	</if>
+         	<if test="creator != null">
+         		T_CREATOR,
+         	</if>
+         	<if test="createTime != null">
+         		T_CREATE_TIME,
+         	</if>
+         </trim>
+          <trim prefix="values (" suffix=")" suffixOverrides=",">  
+         	<if test="id != null">
+         		#{id,jdbcType=VARCHAR},
+         	</if>
+         	<if test="roleName != null">
+         		#{roleName,jdbcType=VARCHAR},
+         	</if>
+         	<if test="roleCode != null">
+         		#{roleCode,jdbcType=VARCHAR},
+         	</if>
+         	<if test="roleDescirbe != null">
+         		#{roleDescirbe,jdbcType=VARCHAR},
+         	</if>
+         	<if test="creator != null">
+         		#{creator,jdbcType=VARCHAR},
+         	</if>
+         	<if test="createTime != null">
+         		#{createTime,jdbcType=TIMESTAMP},
+         	</if>
+         	<if test="updateTime != null">
+         		#{updateTime,jdbcType=TIMESTAMP},
+         	</if>
+         </trim>
+    </insert> 
+    
+     <update id="updateSelectorById" parameterType="cn.javasoft.security.model.RoleModel">
+    	update T_ROLE
+    	<set> 
+         	<if test="roleName != null and roleName != ''">
+         		T_ROLE_NAME = #{roleName,jdbcType=VARCHAR},
+         	</if>
+         	<if test="roleCode != null and roleCode != ''">
+         		T_ROLE_CODE = #{roleCode,jdbcType=VARCHAR},
+         	</if>
+         	<if test="roleDescirbe!= null">
+         		T_ROLE_DESCIRBE = #{roleDescirbe,jdbcType=VARCHAR},
+         	</if>
+         	<if test="createTime != null">
+         		T_CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+         	</if>
+         	<if test="creator != null and creator != ''">
+         		T_CREATOR = #{creator,jdbcType=VARCHAR},
+         	</if>
+         	<if test="updateTime != null">
+         		T_UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+         	</if>
+    	</set>
+    	where T_ID=#{id,jdbcType=VARCHAR}
+    </update>
+    
+    <delete id="deleteById" parameterType="java.lang.String">
+    	delete from T_ROLE where T_ID = #{id,jdbcType=VARCHAR}
+    </delete>
+    
+    <resultMap type="cn.javasoft.security.model.RoleModel" id="AllAndResourcesById">
+    	<result column="T_ID" property="id" jdbcType="VARCHAR"/>
+   		<result column="T_ROLE_NAME" property="roleName" jdbcType="VARCHAR"/>
+   		<result column="T_ROLE_CODE" property="roleCode" jdbcType="VARCHAR"/>
+   		<result column="T_ROLE_DESCIRBE" property="roleDescirbe" jdbcType="VARCHAR"/>
+   		<collection property="resourceRoleModels" javaType="ArrayList" ofType="cn.javasoft.security.model.ResourceRoleModel">
+   			<result column="t_resource_id" property="resourceId" jdbcType="VARCHAR"/>
+   		</collection>
+    </resultMap>
+    <select id="queryAllAndResourcesById" parameterType="java.lang.String" resultMap="AllAndResourcesById"> 
+       select t1.T_ID ,t1.T_ROLE_NAME ,t1.T_ROLE_CODE ,t1.T_ROLE_DESCIRBE ,t2.t_resource_id
+       from T_ROLE t1 left join T_RESOURCE_ROLE t2 on (t1.t_id = t2.T_ROLE_ID) where t1.T_ID = #{id,jdbcType=VARCHAR}
+    </select>
+    
+</mapper> 

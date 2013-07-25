@@ -5,29 +5,30 @@
     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
     http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
-	<beans:bean id="userDetailsServiceImpl" class="com.javasoft.security.UserDetailsServiceImpl"></beans:bean>
+	<beans:bean id="userDetailsServiceImpl" class="cn.javasoft.security.UserDetailsServiceImpl"></beans:bean>
 
 	<http auto-config="true" servlet-api-provision="false" access-denied-page="/admin/nono">
 		<form-login login-page="/admin/login" login-processing-url="/j_spring_security_check"
 			default-target-url="/admin/main" authentication-failure-url="/admin/fail"
 			always-use-default-target="true" />
+			
 		<logout logout-url="/admin/login_out" invalidate-session="true" logout-success-url="/admin/login.vm"/>
 		<custom-filter  ref="resourcesSecurityInterceptor" before="FILTER_SECURITY_INTERCEPTOR" />
 	</http>
 
-	<beans:bean id="resourcesSecurityInterceptor" class="com.javasoft.security.ResourcesSecurityInterceptor">
+	<beans:bean id="resourcesSecurityInterceptor" class="cn.javasoft.security.ResourcesSecurityInterceptor">
 		<beans:property name="accessDecisionManager" ref="accessDecisionManagerImpl" />
 		<beans:property name="authenticationManager" ref="authenticationManager" />
 		<beans:property name="securityMetadataSource" ref="securityMetadataSource" />
 	</beans:bean>
 
-	<beans:bean id="accessDecisionManagerImpl" class="com.javasoft.security.AccessDecisionManagerImpl" />
+	<beans:bean id="accessDecisionManagerImpl" class="cn.javasoft.security.AccessDecisionManagerImpl" />
 	
 <!-- 	<bean id="roleVoter" class="org.acegisecurity.vote.RoleVoter"> -->
 <!--     	<property name="rolePrefix" value="ROLE_"/> -->
 <!-- 	</bean> -->
 	
-	<beans:bean id="securityMetadataSource" class="com.javasoft.security.InvocationSecurityMetadataSourceService" init-method="loadResourceDefine"/>
+	<beans:bean id="securityMetadataSource" class="cn.javasoft.security.InvocationSecurityMetadataSourceService" init-method="loadResourceDefine"/>
 
 	<authentication-manager alias="authenticationManager">
 		<authentication-provider user-service-ref="userDetailsServiceImpl">
@@ -41,5 +42,10 @@
     <!-- <session-management invalid-session-url="/sessionTimeout.jsp" /> -->
 
 	<!-- <bean class="org.springframework.security.authentication.event.LoggerListener"/> -->
+
+	<bean id="resourceService" class="cn.javasoft.security.ResourceServiceImpl"/>
+	<bean id="userResourcesCache" class="cn.javasoft.cache.UserResourcesCache"/>
+	
+	
 
 </beans:beans>

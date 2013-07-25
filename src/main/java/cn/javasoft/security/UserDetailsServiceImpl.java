@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import cn.javasoft.cache.UserResourcesCache;
+import cn.javasoft.security.model.UserModel;
 
 /**
  * @author huangxiongxing
@@ -25,7 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	private transient ResourceService resourceService;
 
 	@Autowired
-	@Qualifier("UserResourcesCache")
+	@Qualifier("userResourcesCache")
 	private transient UserResourcesCache userResourcesCache;
 
 	/*

@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="cn.javasoft.security.mapper.UserMapper"> 
+	<resultMap type="cn.javasoft.security.model.UserModel" id="userModel">
+    	<result column="T_ID" property="id" jdbcType="VARCHAR"/>
+   		<result column="T_USERNAME" property="username" jdbcType="VARCHAR"/>
+   		<result column="T_PASSWORD" property="password" jdbcType="VARCHAR"/>
+   		<result column="T_IS_ACCOUNT_NON_EXPIRED" property="isAccountNonExpired" jdbcType="BIT"/>
+   		<result column="T_IS_ACCOUNT_NON_LOCKED" property="isAccountNonLocked" jdbcType="BIT"/>
+   		<result column="T_IS_CREDENTIALS_NON_EXPIRED" property="isCredentialsNonExpired" jdbcType="BIT"/>
+   		<result column="T_IS_ENABLED" property="isEnabled" jdbcType="BIT"/>
+   		<result column="T_CREATOR" property="creator" jdbcType="VARCHAR"/>
+   		<result column="T_CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+   		<result column="T_LOGIN_TIME" property="loginTime" jdbcType="TIMESTAMP"/>
+   		<result column="T_USER_TYPE" property="userType" jdbcType="INTEGER"/>
+   		<result column="T_LOGIN_IP" property="loginIp" jdbcType="VARCHAR"/>
+   		<result column="T_EMAIL" property="email" jdbcType="VARCHAR"/>
+   		<result column="T_UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP"/>
+   		<result column="T_MERCHANT_ID" property="merchantId" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="baseResult">
+    	T_ID ,T_USERNAME ,T_PASSWORD ,T_IS_ACCOUNT_NON_EXPIRED ,T_IS_ACCOUNT_NON_LOCKED ,T_IS_CREDENTIALS_NON_EXPIRED ,
+        T_IS_ENABLED, T_CREATOR ,T_CREATE_TIME ,T_LOGIN_TIME ,T_USER_TYPE ,T_LOGIN_IP ,T_EMAIL ,T_UPDATE_TIME, T_MERCHANT_ID
+    </sql>
+    
+    <select id="queryModelById" parameterType="java.lang.String" resultMap="userModel"> 
+       select <include refid="baseResult"/>
+       from t_user where T_ID=#{id,jdbcType=VARCHAR}
+    </select> 
+    
+    <resultMap type="cn.javasoft.security.model.UserModel" id="userAndRolesModel">
+    	<result column="T_ID" property="id" jdbcType="VARCHAR"/>
+   		<result column="T_USERNAME" property="username" jdbcType="VARCHAR"/>
+   		<result column="T_IS_ENABLED" property="isEnabled" jdbcType="BIT"/>
+   		<result column="T_USER_TYPE" property="userType" jdbcType="INTEGER"/>
+   		<result column="T_EMAIL" property="email" jdbcType="VARCHAR"/>
+   		<result column="T_MERCHANT_ID" property="merchantId" jdbcType="VARCHAR"/>
+   		<collection property="userRoleModels" javaType="ArrayList" ofType="cn.javasoft.security.model.UserRoleModel">
+   			<result column="t_role_id" property="roleId" jdbcType="VARCHAR"/>
+   		</collection>
+    </resultMap>
+    <select id="queryAllAndRolesById" parameterType="java.lang.String" resultMap="userAndRolesModel"> 
+       select t1.T_ID ,t1.T_USERNAME ,t1.T_IS_ENABLED ,t1.T_USER_TYPE , t1.T_EMAIL ,t1.T_MERCHANT_ID ,t2.t_role_id
+       from t_user t1 left join t_user_role t2 on (t1.t_id = t2.t_user_id) where t1.T_ID=#{id,jdbcType=VARCHAR}
+    </select> 
+    
+    <select id="queryAllByUsername" parameterType="java.lang.String" resultMap="userModel"> 
+       select <include refid="baseResult"/>
+       from t_user where T_USERNAME=#{username,jdbcType=VARCHAR}
+    </select> 
+    
+    <select id="queryModel" parameterType="java.lang.String" resultMap="userModel"> 
+       select <include refid="baseResult"/>
+       from t_user
+    </select> 
+    
+    <select id="queryCount" resultType="java.lang.Integer"> 
+       select count(*) from t_user
+    </select>
+   
+    <select id="queryByPager"  resultMap="userModel"> 
+       select <include refid="baseResult"/>
+       from t_user order by T_CREATE_TIME desc limit #{startPageNumber}, #{pageSize} 
+    </select> 
+    
+    <insert id="insertSelector" parameterType="cn.javasoft.security.model.UserModel"> 
+       insert into T_USER 
+         <trim prefix="(" suffix=")" suffixOverrides=",">  
+         	<if test="id != null">
+         		T_ID,
+         	</if>
+         	<if test="username != null">
+         		T_USERNAME,
+         	</if>
+         	<if test="password != null">
+         		T_PASSWORD,
+         	</if>
+         	<if test="isAccountNonExpired != null">
+         		T_IS_ACCOUNT_NON_EXPIRED,
+         	</if>
+         	<if test="isAccountNonLocked != null">
+         		T_IS_ACCOUNT_NON_LOCKED,
+         	</if>
+         	<if test="isCredentialsNonExpired != null">
+         		T_IS_CREDENTIALS_NON_EXPIRED,
+         	</if>
+         	<if test="isEnabled != null">
+         		T_IS_ENABLED,
+         	</if>
+         	<if test="creator != null">
+         		T_CREATOR,
+         	</if>
+         	<if test="createTime != null">
+         		T_CREATE_TIME,
+         	</if>
+         	<if test="loginTime != null">
+         		T_LOGIN_TIME,
+         	</if>
+         	<if test="userType != null">
+         		T_USER_TYPE,
+         	</if>
+         	<if test="loginIp != null">
+         		T_LOGIN_IP,
+         	</if>
+         	<if test="email != null">
+         		T_EMAIL,
+         	</if>
+         	<if test="updateTime != null">
+         		T_UPDATE_TIME,
+         	</if>
+         	<if test="merchantId != null">
+         		T_MERCHANT_ID,
+         	</if>
+         </trim>
+          <trim prefix="values (" suffix=")" suffixOverrides=",">  
+         	<if test="id != null">
+         		#{id,jdbcType=VARCHAR},
+         	</if>
+         	<if test="username != null">
+         		#{username,jdbcType=VARCHAR},
+         	</if>
+         	<if test="password != null">
+         		#{password,jdbcType=VARCHAR},
+         	</if>
+         	<if test="isAccountNonExpired != null">
+         		#{isAccountNonExpired,jdbcType=BIT},
+         	</if>
+         	<if test="isAccountNonLocked != null">
+         		#{isAccountNonLocked,jdbcType=INTEGER},
+         	</if><if test="isCredentialsNonExpired != null">
+         		#{isCredentialsNonExpired,jdbcType=BIT},
+         	</if>
+         	<if test="isEnabled != null">
+         		#{isEnabled,jdbcType=BIT},
+         	</if>
+         	<if test="creator != null">
+         		#{creator,jdbcType=VARCHAR},
+         	</if>
+         	<if test="createTime != null">
+         		#{createTime,jdbcType=TIMESTAMP},
+         	</if>
+         	<if test="loginTime != null">
+         		#{loginTime,jdbcType=TIMESTAMP},
+         	</if>
+         	<if test="userType != null">
+         		#{userType,jdbcType=INTEGER},
+         	</if>
+         	<if test="loginIp != null">
+         		#{loginIp,jdbcType=VARCHAR},
+         	</if>
+         	<if test="email != null">
+         		#{email,jdbcType=VARCHAR},
+         	</if>
+         	<if test="updateTime != null">
+         		#{updateTime,jdbcType=TIMESTAMP},
+         	</if>
+         	<if test="merchantId != null">
+         		#{merchantId,jdbcType=VARCHAR},
+         	</if>
+         </trim>
+    </insert> 
+    
+    <update id="updateSelectorById" parameterType="cn.javasoft.security.model.UserModel">
+    	update T_USER
+    	<set> 
+         	<if test="username != null and username != ''">
+         		T_USERNAME = #{username,jdbcType=VARCHAR},
+         	</if>
+         	<if test="password != null and password != ''">
+         		T_PASSWORD = #{password,jdbcType=VARCHAR},
+         	</if>
+         	<if test="isAccountNonExpired != null">
+         		T_IS_ACCOUNT_NON_EXPIRED = #{isAccountNonExpired,jdbcType=BIT},
+         	</if>
+         	<if test="isAccountNonLocked != null">
+         		T_IS_ACCOUNT_NON_LOCKED = #{isAccountNonLocked,jdbcType=INTEGER},
+         	</if><if test="isCredentialsNonExpired != null">
+         		T_IS_CREDENTIALS_NON_EXPIRED = #{isCredentialsNonExpired,jdbcType=BIT},
+         	</if>
+         	<if test="isEnabled != null">
+         		T_IS_ENABLED = #{isEnabled,jdbcType=BIT},
+         	</if>
+         	<if test="creator != null">
+         		T_CREATOR = #{creator,jdbcType=VARCHAR},
+         	</if>
+         	<if test="createTime != null">
+         		T_CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+         	</if>
+         	<if test="loginTime != null">
+         		T_LOGIN_TIME = #{loginTime,jdbcType=TIMESTAMP},
+         	</if>
+         	<if test="userType != null">
+         		T_USER_TYPE = #{userType,jdbcType=INTEGER},
+         	</if>
+         	<if test="loginIp != null and loginIp != ''">
+         		T_LOGIN_IP = #{loginIp,jdbcType=VARCHAR},
+         	</if>
+         	<if test="email != null and email != ''">
+         		T_EMAIL = #{email,jdbcType=VARCHAR},
+         	</if>
+         	<if test="updateTime != null">
+         		T_UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+         	</if>
+         	<if test="merchantId != null">
+         		T_MERCHANT_ID = #{merchantId,jdbcType=VARCHAR},
+         	</if>
+    	</set>
+    	where T_ID=#{id,jdbcType=VARCHAR}
+    </update>
+    
+    <delete id="deleteById" parameterType="java.lang.String">
+    	delete from T_USER where T_ID = #{id,jdbcType=VARCHAR}
+    </delete>
+</mapper> 

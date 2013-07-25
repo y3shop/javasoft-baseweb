@@ -1,7 +1,7 @@
 /**
  * 此代码由黄雄星独立完成，如需使用请经过本人同意。版权所有，侵权必究
  */
-package cn.javasoft.security;
+package cn.javasoft.security.model;
 
 import cn.javasoft.BaseModelObject;
 

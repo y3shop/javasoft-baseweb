@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="cn.javasoft.security.mapper.ResourceMapper"> 
+	<resultMap type="cn.javasoft.security.model.ResourceModel" id="ResourceModel">
+    	<result column="T_ID" property="id" jdbcType="VARCHAR"/>
+   		<result column="T_REC_NAME" property="recName" jdbcType="VARCHAR"/>
+   		<result column="T_REC_URL" property="recURL" jdbcType="VARCHAR"/>
+   		<result column="T_REC_CODE" property="recCode" jdbcType="VARCHAR"/>
+   		<result column="T_CREATOR" property="creator" jdbcType="VARCHAR"/>
+   		<result column="T_CREATE_TIME" property="createTime" jdbcType="TIMESTAMP"/>
+   		<result column="T_UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP"/>
+   		<result column="T_RESOURCE_GROUP_ID" property="resourceGroupId" jdbcType="VARCHAR"/>
+   		<result column="T_GROUP_NAME" property="resourceGroupName" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="baseResult">
+    	T_ID ,T_REC_NAME ,T_REC_URL ,T_REC_CODE, T_CREATOR ,T_CREATE_TIME ,T_UPDATE_TIME ,T_RESOURCE_GROUP_ID
+    </sql>
+    
+    <select id="queryModelById" parameterType="java.lang.String" resultMap="ResourceModel"> 
+       select <include refid="baseResult"/>
+       from T_RESOURCE where T_ID=#{id,jdbcType=VARCHAR}
+    </select>
+    
+    <select id="queryModel" parameterType="java.lang.String" resultMap="ResourceModel"> 
+       select <include refid="baseResult"/>
+       from T_RESOURCE
+    </select>  
+    
+    <select id="queryCount" resultType="java.lang.Integer"> 
+       select count(*) from T_RESOURCE
+    </select>
+   
+    <select id="queryByPager"  resultMap="ResourceModel"> 
+       select t.T_ID ,t.T_REC_NAME ,t.T_REC_URL ,t.T_REC_CODE, t.T_CREATOR ,t.T_CREATE_TIME ,t.T_UPDATE_TIME ,t.T_RESOURCE_GROUP_ID , t1.T_GROUP_NAME
+       from T_RESOURCE t left join T_RESOURCE_GROUP t1 on(t.T_RESOURCE_GROUP_ID = t1.T_ID) order by T_CREATE_TIME desc limit #{startPageNumber}, #{pageSize} 
+    </select>
+    
+    <insert id="insertSelector" parameterType="cn.javasoft.security.model.ResourceModel"> 
+       insert into T_RESOURCE 
+         <trim prefix="(" suffix=")" suffixOverrides=",">  
+         	<if test="id != null">
+         		T_ID,
+         	</if>
+         	<if test="recName != null">
+         		T_REC_NAME,
+         	</if>
+         	<if test="recURL != null">
+         		T_REC_URL,
+         	</if>
+         	<if test="recCode != null">
+         		T_REC_CODE,
+         	</if>
+         	<if test="creator != null">
+         		T_CREATOR,
+         	</if>
+         	<if test="createTime != null">
+         		T_CREATE_TIME,
+         	</if>
+         	<if test="updateTime != null">
+         		T_UPDATE_TIME,
+         	</if>
+         	<if test="resourceGroupId != null">
+         		T_RESOURCE_GROUP_ID,
+         	</if>
+         </trim>
+          <trim prefix="values (" suffix=")" suffixOverrides=",">  
+         	<if test="id != null">
+         		#{id,jdbcType=VARCHAR},
+         	</if>
+         	<if test="recName != null">
+         		#{recName,jdbcType=VARCHAR},
+         	</if>
+         	<if test="recURL != null">
+         		#{recURL,jdbcType=VARCHAR},
+         	</if>
+         	<if test="recCode != null">
+         		#{recCode,jdbcType=VARCHAR},
+         	</if>
+         	<if test="creator != null">
+         		#{creator,jdbcType=VARCHAR},
+         	</if>
+         	<if test="createTime != null">
+         		#{createTime,jdbcType=TIMESTAMP},
+         	</if>
+         	<if test="updateTime != null">
+         		#{updateTime,jdbcType=TIMESTAMP},
+         	</if>
+         	<if test="resourceGroupId != null">
+         		#{resourceGroupId,jdbcType=VARCHAR},
+         	</if>
+         </trim>
+    </insert> 
+    
+    <resultMap type="cn.javasoft.security.model.ResourceModel" id="ResourceCodeModel">
+   		<result column="T_REC_CODE" property="recCode" jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="queryModelByUserId" parameterType="java.lang.String" resultMap="ResourceCodeModel"> 
+       select t1.T_REC_CODE from T_RESOURCE t1 join T_USER_RESOURCE t2 on (t2.T_RES_ID = t1.T_ID)  
+       join T_USER t3 on (t2.T_USER_ID = t3.T_ID)
+    </select> 
+    
+     <update id="updateSelectorById" parameterType="cn.javasoft.security.model.ResourceModel">
+    	update T_RESOURCE
+    	<set> 
+         	<if test="recName != null and recName !=''">
+         		T_REC_NAME = #{recName,jdbcType=VARCHAR},
+         	</if>
+         	<if test="recURL != null and recURL !=''">
+         		T_REC_URL = #{recURL,jdbcType=VARCHAR},
+         	</if>
+         	<if test="recCode != null and recCode !=''">
+         		T_REC_CODE = #{recCode,jdbcType=VARCHAR},
+         	</if>
+         	<if test="creator != null and creator !=''">
+         		T_CREATOR = #{creator,jdbcType=VARCHAR},
+         	</if>
+         	<if test="createTime != null">
+         		T_CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+         	</if>
+         	<if test="updateTime != null">
+         		T_UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+         	</if>
+         	<if test="resourceGroupId != null">
+         		T_RESOURCE_GROUP_ID = #{resourceGroupId,jdbcType=VARCHAR},
+         	</if>
+    	</set>
+    	where T_ID=#{id,jdbcType=VARCHAR}
+    </update>
+    
+    <delete id="deleteById" parameterType="java.lang.String">
+    	delete from T_RESOURCE where T_ID = #{id,jdbcType=VARCHAR}
+    </delete>
+    
+    <select id="queryRolesModelByUserId" parameterType="java.lang.String" resultMap="ResourceModel"> 
+       select t3.T_REC_CODE from T_USER_ROLE t1 join T_RESOURCE_ROLE t2 on (t2.T_ROLE_ID = t1.T_ROLE_ID) 
+       join T_RESOURCE t3 on (t2.T_RESOURCE_ID = t3.T_ID) where t1.T_USER_ID = #{userId,jdbcType=VARCHAR}
+    </select>
+    
+</mapper> 
