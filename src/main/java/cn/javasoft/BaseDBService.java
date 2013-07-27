@@ -96,45 +96,42 @@ public class BaseDBService<T extends BaseModelObject> {
 		return baseMapper.insertSelector(t);
 	}
 
-	// @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED,
-	// timeout = 3, rollbackFor = Exception.class)
-	// public int update(T t) {
-	// Assert.notNull(t, "调用update，请检查对象是否为空");
-	// t.setUpdateTime(new Date());
-	// if (log.isDebugEnabled()) {
-	// log.debug("update model[{}]", t.toString());
-	// }
-	// Method method;
-	// try {
-	// method = t.getClass().getMethod(BaseModelObject.ON_UPDATE_METHOD_NAME);
-	// method.invoke(t);
-	// } catch (Exception e) {
-	// log.error(String.format("model[%s]onUpdate异常", t.toString()), e);
-	// }
-	// return baseMapper.updateSelectorById(t);
-	// }
-	//
-	// @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED,
-	// timeout = 3, rollbackFor = Exception.class)
-	// public void deleteList(List<String> ids) {
-	// Assert.notNull(ids, "调用deleteList，请检查对象是否为空");
-	// if (log.isDebugEnabled()) {
-	// log.debug("deleteList model[{}]", ids.toString());
-	// }
-	// for (String id : ids) {
-	// baseMapper.deleteById(id);
-	// }
-	// }
-	//
-	// @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED,
-	// timeout = 3, rollbackFor = Exception.class)
-	// public void delete(String id) {
-	// Assert.notNull(id, "调用delete，请检查对象是否为空");
-	// if (log.isDebugEnabled()) {
-	// log.debug("delete model[{}]", id.toString());
-	// }
-	// baseMapper.deleteById(id);
-	// }
+	@Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, timeout = 3, rollbackFor = Exception.class)
+	public int update(T t) {
+		Assert.notNull(t, "调用update，请检查对象是否为空");
+		t.setUpdateTime(new Date());
+		if (log.isDebugEnabled()) {
+			log.debug("update model[{}]", t.toString());
+		}
+		Method method;
+		try {
+			method = t.getClass().getMethod(BaseModelObject.ON_UPDATE_METHOD_NAME);
+			method.invoke(t);
+		} catch (Exception e) {
+			log.error(String.format("model[%s]onUpdate异常", t.toString()), e);
+		}
+		return baseMapper.updateSelectorById(t);
+	}
+
+	@Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, timeout = 3, rollbackFor = Exception.class)
+	public void deleteList(List<String> ids) {
+		Assert.notNull(ids, "调用deleteList，请检查对象是否为空");
+		if (log.isDebugEnabled()) {
+			log.debug("deleteList model[{}]", ids.toString());
+		}
+		for (String id : ids) {
+			baseMapper.deleteById(id);
+		}
+	}
+
+	@Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED, timeout = 3, rollbackFor = Exception.class)
+	public void delete(String id) {
+		Assert.notNull(id, "调用delete，请检查对象是否为空");
+		if (log.isDebugEnabled()) {
+			log.debug("delete model[{}]", id.toString());
+		}
+		baseMapper.deleteById(id);
+	}
 
 	/**
 	 * 
